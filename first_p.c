@@ -16,7 +16,7 @@ void sigintHandler(int sig_num)
 	/* Reset handler to catch SIGINT next time.
 	   Refer http://en.cppreference.com/w/c/program/signal */
 	signal(SIGINT, sigintHandler);
-	printf("\n$ Can't use Ctrl + C\n$ ");
+	printf("\n$ ");
 	fflush(stdout);
 }
 
@@ -40,6 +40,29 @@ void print_ls()
 	execve(av[0], av, NULL);
 }
 
+int get_token(char *str)
+{
+
+	// Returns first token
+	char *token = strtok(str, "\n");
+	char *dest;
+
+	// Keep printing tokens while one of the 
+	// delimiters present in str[]. 
+	while (token != NULL)
+	{
+		dest = token;
+		printf("%s\n", token);
+		token = strtok(NULL, "\n");
+	}
+	printf("JUANITO DEST FUERA DE WILLI: %s\n", dest);
+	if (dest)
+	{
+		print_ls();
+	}
+	return (0);
+}
+
 void loop(char *av[], char *envp[])
 {
 	ssize_t bytes_read;
@@ -61,7 +84,7 @@ void loop(char *av[], char *envp[])
 		clave[0] = strtok(buffer, "\n");
 		if (bytes_read == -1)
 		{
-			printf("$ U should have killed me when u have the chance\n");
+			printf("You can't kill JUANITO!!!\n");
 
 		}
 		else
@@ -83,10 +106,12 @@ void loop(char *av[], char *envp[])
 				//	exit(98);
 				printf("$ NOOOOOOOOOOOOOOOOOOOOO...\n");
 				sleep(2);
-				if (buffer == "ls")
-					print_ls();
-				print_env(envp);
-				print_echo();
+				get_token(buffer);
+				//if (buffer == "ls")
+				//	print_ls();
+				//print_ls();
+				//	print_env(envp);
+				//print_echo();
 			}
 		}
 	}
