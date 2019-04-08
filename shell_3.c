@@ -110,9 +110,9 @@ void command_promt(char *envp[])
     char cwd[1024]; 
     char *username;
 
-    username = getlogin();
+    /*username = getlogin();
 
-    getcwd(cwd, sizeof(cwd));
+    getcwd(cwd, sizeof(cwd));*/
 
     signal(SIGINT, sigintHandler);
 
