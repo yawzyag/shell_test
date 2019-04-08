@@ -30,12 +30,14 @@ void parse_text(char *str, char **parsed)
 {
     const char delimiters[] = " \n";
     char *dest;
+    int i = 0;
 
     dest = strtok(str, delimiters);
     while (dest)
     {
-        *parsed = dest;
+        parsed[i] = dest;
         dest = strtok(NULL, delimiters);
+	i++;
     }
 }
 
