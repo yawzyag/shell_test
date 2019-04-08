@@ -16,18 +16,8 @@ void sigintHandler()
     fflush(stdout);
 }
 
-int takeInput(char *str)
+int takeInput(char *str, char* buffer)
 {
-    ssize_t bytes_read;
-    size_t nbytes = 0;
-    char *buffer = NULL;
-
-    bytes_read = getline(&buffer, &nbytes, stdin);
-    if (bytes_read == -1)
-    {
-        printf("You must not kill JUANITO!!!\n");
-        /*exit(1);*/
-    }
     if (strlen(buffer) != 0)
     {
         strcpy(str, buffer);
@@ -99,7 +89,6 @@ void exec_args(char **parsed, char **env)
     {
         /* waiting for child to terminate */
         wait(NULL);
-        return;
     }
 }
 
@@ -107,22 +96,33 @@ void command_promt(char *envp[])
 {
     char input_user[1024];
     char *parsed_args[1024];
+    ssize_t bytes_read;
+	size_t nbytes = 0;
+	char *buffer = NULL;
+    int atty = isatty(0);
     /*char cwd[1024]; 
     char *username;
+
 
     username = getlogin();
 
     getcwd(cwd, sizeof(cwd));*/
 
     signal(SIGINT, sigintHandler);
-
     while (1)
     {
-        printf("$(╯°□°）╯ ");
+        if(atty)
+            printf("$(╯°□°）╯ ");
 
-        if (takeInput(input_user))
-            continue;
-
+        bytes_read = getline(&buffer, &nbytes, stdin);
+        if (bytes_read == -1)
+		{
+			printf("$(╯°□°）╯ You can't kill JUANITO!!!\n"); /*this line need to be commented*/
+            exit(98);
+		}
+        if (takeInput(input_user, buffer))
+            break;
+    
         parse_text(input_user, parsed_args);
 
         exec_args(parsed_args, envp);
