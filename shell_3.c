@@ -110,7 +110,7 @@ void command_promt(char *envp[])
     char cwd[1024]; 
     char *username;
 
-    username = getenv("USER");
+    username = getlogin();
 
     getcwd(cwd, sizeof(cwd));
 
