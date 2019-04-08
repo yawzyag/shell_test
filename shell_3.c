@@ -9,10 +9,7 @@
 
 void sigintHandler()
 {
-    /* Reset handler to catch SIGINT next time.
-	   Refer http://en.cppreference.com/w/c/program/signal */
-    signal(SIGINT, sigintHandler);
-    printf("\n(╯°□°）╯");
+    printf("\n$(╯°□°）╯");
     fflush(stdout);
 }
 
@@ -21,7 +18,7 @@ int takeInput(char *str, char* buffer)
     if (strlen(buffer) != 0)
     {
         strcpy(str, buffer);
-        return 0;
+        return (0);
     }
     else
     {
@@ -77,61 +74,61 @@ void exec_args(char **parsed, char **env)
     }
     else if (pid == 0)
     {
-        process = execve(parsed[0], parsed, env);
-        printf("process %i\n", process);
-        if (process < 0)
-        {
-            printf("\nError juanito no process");
-        }
-        exit(0);
+	    process = execve(parsed[0], parsed, env);
+	    printf("process %i\n", process);
+	    if (process < 0)
+	    {
+		    printf("\nError juanito no process");
+	    }
+	    exit(0);
     }
     else
     {
-        /* waiting for child to terminate */
-        wait(NULL);
+	    /* waiting for child to terminate */
+	    wait(NULL);
     }
 }
 
 void command_promt(char *envp[])
 {
-    char input_user[1024];
-    char *parsed_args[1024];
-    ssize_t bytes_read;
+	char *input_user = malloc(sizeof(char) * 1024);
+	char **parsed_args = malloc(sizeof(char) * 1024);
+	ssize_t bytes_read;
 	size_t nbytes = 0;
-	char *buffer = NULL;
-    int atty = isatty(0);
-    /*char cwd[1024]; 
-    char *username;
+	char *buffer = malloc(sizeof(char) * 1024);
+	int atty = isatty(0);
+	/*char cwd[1024];
+	  char *username;
 
+	  username = getlogin();
 
-    username = getlogin();
+	  getcwd(cwd, sizeof(cwd));*/
 
-    getcwd(cwd, sizeof(cwd));*/
+	signal(SIGINT, sigintHandler);
+	while (1)
+	{
+		if(atty)
+			printf("$(╯°□°）╯ ");
 
-    signal(SIGINT, sigintHandler);
-    while (1)
-    {
-        if(atty)
-            printf("$(╯°□°）╯ ");
-
-        bytes_read = getline(&buffer, &nbytes, stdin);
-        if (bytes_read == -1)
+		bytes_read = getline(&buffer, &nbytes, stdin);
+		if (bytes_read == -1)
 		{
-			printf("$(╯°□°）╯ You can't kill JUANITO!!!\n"); /*this line need to be commented*/
-            exit(98);
+			printf("You can't kill JUANITO!!!\n"); /*this line need to be commented*/
+			exit(98);
 		}
-        if (takeInput(input_user, buffer))
-            break;
-    
-        parse_text(input_user, parsed_args);
-
-        exec_args(parsed_args, envp);
-    }
+		if (buffer[0] != '\n')
+		{
+			if (takeInput(input_user, buffer))
+				break;
+			parse_text(input_user, parsed_args);
+			exec_args(parsed_args, envp);
+		}
+	}
 }
 
 int main(int ac __attribute__((unused)), char **av __attribute__((unused)), char *envp[])
 {
-    command_promt(envp);
+	command_promt(envp);
 
-    return (0);
+	return (0);
 }
