@@ -7,7 +7,7 @@
 #include <string.h>
 #include <limits.h>
 
-void sigintHandler(int sig_num)
+void sigintHandler()
 {
     /* Reset handler to catch SIGINT next time.
 	   Refer http://en.cppreference.com/w/c/program/signal */
@@ -41,7 +41,6 @@ int takeInput(char *str)
 
 void parse_text(char *str, char **parsed)
 {
-    printf("%s\n", str);
     const char delimiters[] = " \n";
     char *dest;
 
@@ -49,7 +48,6 @@ void parse_text(char *str, char **parsed)
     while (dest)
     {
         *parsed = dest;
-        printf("%s\n", dest);
         dest = strtok(NULL, delimiters);
     }
 }
@@ -109,12 +107,18 @@ void command_promt(char *envp[])
 {
     char input_user[1024];
     char *parsed_args[1024];
+    char cwd[1024]; 
+    char *username;
+
+    username = getenv("USER");
+
+    getcwd(cwd, sizeof(cwd));
 
     signal(SIGINT, sigintHandler);
 
     while (1)
     {
-        printf("(╯°□°）╯ ");
+        printf("%s:%s(╯°□°）╯ ", username, cwd);
 
         if (takeInput(input_user))
             continue;
