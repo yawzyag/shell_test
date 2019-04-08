@@ -107,10 +107,10 @@ void command_promt(char *envp[])
 {
     char input_user[1024];
     char *parsed_args[1024];
-    char cwd[1024]; 
+    /*char cwd[1024]; 
     char *username;
 
-    /*username = getlogin();
+    username = getlogin();
 
     getcwd(cwd, sizeof(cwd));*/
 
@@ -118,7 +118,7 @@ void command_promt(char *envp[])
 
     while (1)
     {
-        printf("%s:%s(╯°□°）╯ ", username, cwd);
+        printf("$(╯°□°）╯ ");
 
         if (takeInput(input_user))
             continue;
