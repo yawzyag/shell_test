@@ -28,7 +28,7 @@ int takeInput(char *str, char* buffer)
 
 void parse_text(char *str, char **parsed)
 {
-    const char delimiters[] = " \n";
+    const char delimiters[] = " \n\"";
     char *dest;
     int i = 0;
 
@@ -43,23 +43,40 @@ void parse_text(char *str, char **parsed)
 
 void check_parse(char **parsed)
 {
-    char *a = malloc(256);
+	char *a = malloc(256);
 
-    if (strcmp(parsed[0], "ls") == 0)
-    {
-        strcpy(a, "/bin/ls");
-        parsed[0] = a;
-    }
-    else if (strcmp(parsed[0], "pwd") == 0)
-    {
-        strcpy(a, "/bin/pwd");
-        parsed[0] = a;
-    }
-    else if (strcmp(parsed[0], "env") == 0)
-    {
-        strcpy(a, "/usr/bin/env");
-        parsed[0] = a;
-    }
+	if (strcmp(parsed[0], "ls") == 0)
+	{
+		strcpy(a, "/bin/ls");
+		parsed[0] = a;
+	}
+	else if (strcmp(parsed[0], "pwd") == 0)
+	{
+		strcpy(a, "/bin/pwd");
+		parsed[0] = a;
+	}
+	else if (strcmp(parsed[0], "env") == 0)
+	{
+		strcpy(a, "/usr/bin/env");
+		parsed[0] = a;
+	}
+	else if (strcmp(parsed[0], "echo") == 0)
+	{
+		strcpy(a, "/bin/echo");
+		parsed[0] = a;
+	}
+	else if (strcmp(parsed[0], "nano") == 0)
+	{
+		strcpy(a, "/bin/nano");
+		parsed[0] = a;
+	}
+	else if (strcmp(parsed[0], "exit") == 0)
+	{
+		if (atoi(parsed[1]))
+			exit(atoi(parsed[1]));
+		else
+			exit(0);
+	}
 }
 
 void exec_args(char **parsed, char **env)
