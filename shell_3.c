@@ -69,7 +69,7 @@ char *check_parse(char **parsed)
     }
     else if(strcmp(parsed[0], "env") == 0)
     {
-        strcpy(a, "/bin/env");
+        strcpy(a, "/usr/bin/env");
         parsed[0] = a;
     }
     
