@@ -42,7 +42,6 @@ int takeInput(char *str)
 void parse_text(char *str, char **parsed)
 {
     printf("%s\n", str);
-    int i;
     const char delimiters[] = " \n";
     char *dest;
 
@@ -55,7 +54,7 @@ void parse_text(char *str, char **parsed)
     }
 }
 
-char *check_parse(char **parsed)
+void check_parse(char **parsed)
 {
     char *a = malloc(256);
 
@@ -106,10 +105,9 @@ void exec_args(char **parsed, char **env)
     }
 }
 
-void command_promt(char **av, char *envp[])
+void command_promt(char *envp[])
 {
     char input_user[1024];
-    int i = 0;
     char *parsed_args[1024];
 
     signal(SIGINT, sigintHandler);
@@ -127,9 +125,9 @@ void command_promt(char **av, char *envp[])
     }
 }
 
-int main(int ac __attribute__((unused)), char **av, char *envp[])
+int main(int ac __attribute__((unused)), char **av __attribute__((unused)), char *envp[])
 {
-    command_promt(av, envp);
+    command_promt(envp);
 
     return (0);
 }
