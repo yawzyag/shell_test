@@ -26,9 +26,16 @@ void free_grid(char **grid)
 
 	if (grid != NULL)
 	{
-		for (i = 0; grid[i]; i++)
-			free(*(grid + i));
-
+		for (i = 0; grid[i];)
+		{
+			i++;
+		}
+		i - 1;
+		for (; grid[i] == NULL; i--)
+		{
+			free(grid[i]);
+		}
+		free(grid[0]);
 		free(grid);
 	}
 }
@@ -75,6 +82,7 @@ void parse_text(char *str, char **parsed)
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
+	/**/
 }
 
 /**
@@ -157,18 +165,16 @@ void exec_args(char **parsed, char **env)
 void command_promt(char *envp[])
 {
 	int size_juanito = 1024;
-	char *input_user = malloc(sizeof(char) * size_juanito);
-	char **parsed_args = malloc(sizeof(char) * size_juanito);
+	char *input_user;
+	char **parsed_args;
 	ssize_t bytes_read;
 	size_t nbytes = 0;
-	char *buffer = malloc(sizeof(char) * size_juanito);
+	char *buffer;
 	int atty = isatty(0);
 	/*char cwd[1024];
-	  char *username;
-
-	  username = getlogin();
-
-	  getcwd(cwd, sizeof(cwd));*/
+	    char *username;
+	      username = getlogin();
+	      getcwd(cwd, sizeof(cwd));*/
 
 	signal(SIGINT, sigintHandler);
 	while (1)
@@ -176,7 +182,10 @@ void command_promt(char *envp[])
 		if(atty)
 			printf("$(╯°□°）╯ ");
 
+		buffer = malloc(sizeof(char) * size_juanito);
 		bytes_read = getline(&buffer, &nbytes, stdin);
+		input_user = malloc(sizeof(char) * size_juanito);
+		parsed_args = malloc(sizeof(char) * size_juanito);
 		if (bytes_read == -1)
 		{
 			printf("You can't kill JUANITO!!!\n"); /*this line need to be commented*/
@@ -184,8 +193,9 @@ void command_promt(char *envp[])
 		}
 		if (buffer[0] != '\n')
 		{
-			if (takeInput(input_user, buffer))
-				break;
+			takeInput(input_user, buffer);
+			if (buffer)
+				free(buffer);
 			parse_text(input_user, parsed_args);
 			exec_args(parsed_args, envp);
 		}
