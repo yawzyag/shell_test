@@ -8,7 +8,7 @@
 #include <limits.h>
 
 /**
- * siginthandler - Function to anulate the ^C
+ * sigintHandler - Function to anulate the ^C
  * Description: There's no parameters inside this function
  *
  * Return: No returns in this function
@@ -20,23 +20,30 @@ void sigintHandler()
 	fflush(stdout);
 }
 
-void free_grid(char **grid)
+/**
+ * free_parsed - Function to free arguments allocated in malloc
+ * @parsed: The arguments to be free
+ *
+ * Return: No returns in this function
+ */
+
+void free_parsed(char **parsed)
 {
 	int i;
 
-	if (grid != NULL)
+	if (parsed != NULL)
 	{
-		for (i = 0; grid[i];)
+		for (i = 0; parsed[i];)
 		{
 			i++;
 		}
 		i - 1;
-		for (; grid[i] == NULL; i--)
+		for (; parsed[i] == NULL; i--)
 		{
-			free(grid[i]);
+			free(parsed[i]);
 		}
-		free(grid[0]);
-		free(grid);
+		free(parsed[0]);
+		free(parsed);
 	}
 }
 
@@ -82,12 +89,15 @@ void parse_text(char *str, char **parsed)
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
-	/**/
+	/**
+	 * if (dest)
+	 * free(dest);
+	 */
 }
 
 /**
- * check_parse - Function to anulate the ^C
- * Description: There's no parameters inside this function
+ * check_parse - Function to check the commands words
+ * @parsed: string parsed where you can find a command word
  *
  * Return: No returns in this function
  */
@@ -132,11 +142,22 @@ void check_parse(char **parsed)
 	}
 }
 
+/**
+ * exec_args - Function to execute a process in child process
+ * @parsed: string received
+ * @env: Environment
+ *
+ * Return: No returns in this function
+ */
+
 void exec_args(char **parsed, char **env)
 {
 	int process;
-	/* Forking a child */
+	/**
+	 * Forking a child
+	 */
 	pid_t pid = fork();
+
 	check_parse(parsed);
 	if (pid == -1)
 	{
@@ -155,12 +176,21 @@ void exec_args(char **parsed, char **env)
 	}
 	else
 	{
-		/* waiting for child to terminate */
+		/**
+		 * waiting for child to terminate
+		 */
 		wait(NULL);
 		if (parsed)
-			free_grid(parsed);
+			free_parsed(parsed);
 	}
 }
+
+/**
+ * command_promt - Function to open a prompt for our shell
+ * @envp: Receive the arguments passed to shell
+ *
+ * Return: No returns in this function
+ */
 
 void command_promt(char *envp[])
 {
@@ -171,39 +201,54 @@ void command_promt(char *envp[])
 	size_t nbytes = 0;
 	char *buffer;
 	int atty = isatty(0);
-	/*char cwd[1024];
-	    char *username;
-	      username = getlogin();
-	      getcwd(cwd, sizeof(cwd));*/
+	/**
+	 * char cwd[1024];
+	 * char *username;
+	 * username = getlogin();
+	 * getcwd(cwd, sizeof(cwd));
+	 */
 
 	signal(SIGINT, sigintHandler);
 	while (1)
 	{
-		if(atty)
+		if (atty)
 			printf("$(╯°□°）╯ ");
-
 		buffer = malloc(sizeof(char) * size_juanito);
 		bytes_read = getline(&buffer, &nbytes, stdin);
 		input_user = malloc(sizeof(char) * size_juanito);
 		parsed_args = malloc(sizeof(char) * size_juanito);
 		if (bytes_read == -1)
 		{
-			printf("You can't kill JUANITO!!!\n"); /*this line need to be commented*/
+			printf("You can't kill JUANITO!!!\n");
+/**
+ * this line need to be commented
+*/
 			exit(98);
 		}
 		if (buffer[0] != '\n')
 		{
 			takeInput(input_user, buffer);
 			if (buffer)
-				free(buffer);
+			  free(buffer);
 			parse_text(input_user, parsed_args);
 			exec_args(parsed_args, envp);
 		}
 	}
 }
 
-int main(int ac __attribute__((unused)), char **av __attribute__((unused)), char *envp[])
+/**
+ * main - Entry Point
+ * @ac: counter of arguments
+ * @av: arguments received in shell
+ * @envp: environment
+ *
+ * Return: Always 0 (success)
+ */
+
+int main(int ac, char **av, char *envp[])
 {
+	(void)ac;
+	(void)av;
 	command_promt(envp);
 
 	return (0);
