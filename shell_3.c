@@ -72,10 +72,9 @@ void check_parse(char **parsed)
 	}
 	else if (strcmp(parsed[0], "exit") == 0)
 	{
-		if (atoi(parsed[1]))
-			exit(atoi(parsed[1]));
-		else
-			exit(0);
+		/** if (atoi(parsed[1]))
+		   exit(atoi(parsed[1])); */
+		exit(0);
 	}
 }
 
