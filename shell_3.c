@@ -20,6 +20,27 @@ void sigintHandler()
 	fflush(stdout);
 }
 
+
+/**
+ * _getline - Function get a line from stdin
+ * @buf: Buffer allocated
+ * @size: size of buffer
+ * @stream: stdin
+ *
+ * Return: counter
+ */
+
+ssize_t _getline(char *buf, size_t size, FILE *stream)
+{
+	ssize_t count = 0;
+	char c;
+	while ((c = (char)getc(stream)) != '\n' && count < size - 1)
+		buf[count++] = c;
+	buf[count] = '\0';
+	return (count);
+}
+
+
 /**
  * free_parsed - Function to free arguments allocated in malloc
  * @parsed: The arguments to be free
@@ -214,7 +235,7 @@ void command_promt(char *envp[])
 		if (atty)
 			printf("$(╯°□°）╯ ");
 		buffer = malloc(sizeof(char) * size_juanito);
-		bytes_read = getline(&buffer, &nbytes, stdin);
+		bytes_read = _getline(buffer, nbytes, stdin);
 		input_user = malloc(sizeof(char) * size_juanito);
 		parsed_args = malloc(sizeof(char) * size_juanito);
 		if (bytes_read == -1)
