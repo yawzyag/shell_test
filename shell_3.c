@@ -235,7 +235,7 @@ void command_promt(char *envp[])
 		if (atty)
 			printf("$(╯°□°）╯ ");
 		buffer = malloc(sizeof(char) * size_juanito);
-		bytes_read = _getline(buffer, nbytes, stdin);
+		bytes_read = getline(&buffer, &nbytes, stdin);
 		input_user = malloc(sizeof(char) * size_juanito);
 		parsed_args = malloc(sizeof(char) * size_juanito);
 		if (bytes_read == -1)
