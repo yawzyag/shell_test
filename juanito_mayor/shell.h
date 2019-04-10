@@ -28,5 +28,6 @@ typedef struct path_s
 size_t print_list(const paths_t *h);
 char *_strdup(char *str);
 int _strlen(char *s);
+int _strcmp(char *s1, char *s2);
 
 #endif /* JUANITO_SHELL */
