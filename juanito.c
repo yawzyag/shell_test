@@ -143,31 +143,31 @@ void check_path(char **parsed, const paths_t *h)
 	char *juanito = malloc(sizeof(char) * 1024);
 	struct stat *buf;
 
-	buf = malloc(sizeof(struct stat));
-	if (buf == NULL)
-		return;
-	if (!h)
-		return;
-	print_list(h);
-	while (h)
+	if(strlen(parsed[0]) < 9)
 	{
-		if (h->path)
+		buf = malloc(sizeof(struct stat));
+		if (buf == NULL)
+			return;
+		if (!h)
+			return;
+		while (h)
 		{
-			juanito = strdup(h->path);
-			tmp = strcat(juanito, "/");
-			tmp2 = strcat(tmp, parsed[0]);
-			
-			printf("%s\n", tmp2);
-			printf("%d\n",stat(tmp2, buf));
-			if(stat(tmp2, buf) == 0)
+			if (h->path)
 			{
-				parsed[0] = tmp2;
-				break;
+				juanito = strdup(h->path);
+				tmp = strcat(juanito, "/");
+				tmp2 = strcat(tmp, parsed[0]);
+
+				if(stat(tmp2, buf) == 0)
+				{
+					parsed[0] = strdup(tmp2);
+					break;
+				}
+				h = h->next;
 			}
-			h = h->next;
 		}
-		
 	}
+	free(juanito);
 }
 
 /**
@@ -179,34 +179,6 @@ void check_path(char **parsed, const paths_t *h)
 
 void check_parse(char **parsed)
 {
-	/*char *a = malloc(256);*/
-
-	/*if (strcmp(parsed[0], "ls") == 0)
-	   {
-	   strcpy(a, "/bin/ls");
-	   parsed[0] = a;
-	   }
-	   else if (strcmp(parsed[0], "pwd") == 0)
-	   {
-	   strcpy(a, "/bin/pwd");
-	   parsed[0] = a;
-	   }
-	   else if (strcmp(parsed[0], "env") == 0)
-	   {
-	   strcpy(a, "/usr/bin/env");
-	   parsed[0] = a;
-	   }
-	   else if (strcmp(parsed[0], "echo") == 0)
-	   {
-	   strcpy(a, "/bin/echo");
-	   parsed[0] = a;
-	   }
-	   else if (strcmp(parsed[0], "nano") == 0)
-	   {
-	   strcpy(a, "/bin/nano");
-	   parsed[0] = a;
-	   }
-	   else*/
 	if (strcmp(parsed[0], "exit") == 0)
 	{
 		if (parsed[1])
@@ -214,12 +186,8 @@ void check_parse(char **parsed)
 			if (atoi(parsed[1]))
 				exit(atoi(parsed[1]));
 		}
-		/*if (a)
-		  free(a);*/
 		exit(0);
 	}
-	/*if (a)
-	  free(a);*/
 }
 
 /**
