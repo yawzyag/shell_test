@@ -159,8 +159,12 @@ void check_parse(char **parsed)
 			if (atoi(parsed[1]))
 				exit(atoi(parsed[1]));
 		}
+		/*if (a)
+		  free(a);*/
 		exit(0);
 	}
+	/*if (a)
+	  free(a);*/
 }
 
 /**
