@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
@@ -7,6 +8,13 @@
 #include <string.h>
 #include <limits.h>
 
+
+typedef struct path
+{
+	char *path_s;
+	struct path_s *next;
+
+}paths_t;
 /**
  * sigintHandler - Function to anulate the ^C
  * Description: There's no parameters inside this function
@@ -116,6 +124,20 @@ void parse_text(char *str, char **parsed)
 	 */
 }
 
+int check_path(char **parsed, char **p_path_strin)
+{
+	int i = 0;
+	char *tmp;
+
+	i = 0;
+	while (p_path_strin[i])
+	{
+		tmp = strcat(p_path_strin[i], "/ls");
+		printf("%s\n", p_path_strin[i]);
+		i++;
+	}
+}
+
 /**
  * check_parse - Function to check the commands words
  * @parsed: string parsed where you can find a command word
@@ -123,7 +145,7 @@ void parse_text(char *str, char **parsed)
  * Return: No returns in this function
  */
 
-void check_parse(char **parsed)
+void check_parse(char **parsed, char **p_path_string)
 {
 	char *a = malloc(256);
 
@@ -163,6 +185,9 @@ void check_parse(char **parsed)
 		  free(a);*/
 		exit(0);
 	}
+	else if (check_path(parsed, p_path_string))
+	{
+	}
 	/*if (a)
 	  free(a);*/
 }
@@ -175,15 +200,15 @@ void check_parse(char **parsed)
  * Return: No returns in this function
  */
 
-void exec_args(char **parsed, char **env)
+void exec_args(char **parsed, char **env, char **p_path_string)
 {
 	int process;
 	/**
 	 * Forking a child
 	 */
-	pid_t pid = fork();
-
-	check_parse(parsed);
+	pid_t pid = fork();	
+	
+	check_parse(parsed, p_path_string);
 	if (pid == -1)
 	{
 		printf("\nFailed fork in juanito :c..");
@@ -210,6 +235,62 @@ void exec_args(char **parsed, char **env)
 	}
 }
 
+void parse_text_path(char *str, char **parsed)
+{
+	const char delimiters[] = "=:";
+	char *dest;
+	int i = 0;
+
+	dest = strtok(str, delimiters);
+	while (dest)
+	{
+		parsed[i] = dest;
+		dest = strtok(NULL, delimiters);
+		i++;
+	}
+	/**
+	 * if (dest)
+	 * free(dest);
+	 */
+}
+
+char **get_path(char **env, char *comparation)
+{
+	int i = 0, j = 0;
+	char **juanito;
+	int num, count;
+	char *tmp;
+	char **tmp2 = malloc(sizeof(char) * 1024);
+	char *dest;
+    
+	juanito = env;
+    
+	while(juanito[i] != NULL)
+	{
+		j = 0;
+		count = 0;
+		while(juanito[i][j])
+		{
+			if(juanito[i][j] == comparation[j] && j < 4)
+			{
+				count++;
+				if(count == 4 && j == 3)
+					num = i;
+			}
+			else
+				count = 0;
+			j++;
+		}
+        
+		i++;
+	}
+	tmp = juanito[num];
+    
+	parse_text_path(tmp, tmp2);
+	
+	return(tmp2);
+}
+
 /**
  * command_promt - Function to open a prompt for our shell
  * @envp: Receive the arguments passed to shell
@@ -225,7 +306,14 @@ void command_promt(char *envp[])
 	ssize_t bytes_read;
 	size_t nbytes = 0;
 	char *buffer;
-	int atty = isatty(0);
+
+	char **p_path_string = malloc(sizeof(char) * 1024);
+	char *path;
+    
+	path = "PATH";
+	p_path_string = get_path(envp, path);
+
+	
 	/**
 	 * char cwd[1024];
 	 * char *username;
@@ -236,7 +324,7 @@ void command_promt(char *envp[])
 	signal(SIGINT, sigintHandler);
 	while (1)
 	{
-		if (atty)
+		if (isatty(0))
 			printf("$(╯°□°）╯ ");
 		buffer = malloc(sizeof(char) * size_juanito);
 		bytes_read = getline(&buffer, &nbytes, stdin);
@@ -256,7 +344,7 @@ void command_promt(char *envp[])
 			if (buffer)
 			  free(buffer);
 			parse_text(input_user, parsed_args);
-			exec_args(parsed_args, envp);
+			exec_args(parsed_args, envp, p_path_string);
 		}
 	}
 }
