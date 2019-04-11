@@ -373,7 +373,7 @@ void command_promt(char *envp[])
 		/*if (parsed_args)
 			free_parsed(parsed_args);*/
 		if (input_user) /*funciona ... a veces*/
-			free(input_user);
+			free(input_user); 
 	}
 	if (p_path_string)
 	{
