@@ -76,7 +76,7 @@ int takeInput(char *str, char *buffer)
 {
 	if (_strlen(buffer) != 0)
 	{
-		strcpy(str, buffer);
+		_strcpy(str, buffer);
 		return (0);
 	}
 	else
@@ -106,7 +106,7 @@ void parse_text(char *str, char **parsed)
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
-	if(str)
+	if (str)
 		free(str);
 	if (dest)
 		free(dest);
@@ -119,7 +119,7 @@ void check_path(char **parsed, const paths_t *h)
 	char *juanito = malloc(sizeof(char) * 1024);
 	struct stat *buf;
 
-	if(_strlen(parsed[0]) < 9)
+	if (_strlen(parsed[0]) < 9)
 	{
 		buf = malloc(sizeof(struct stat));
 		if (buf == NULL)
@@ -134,7 +134,7 @@ void check_path(char **parsed, const paths_t *h)
 				tmp = _strdup(strcat(juanito, "/"));
 
 				tmp2 = _strdup(strcat(tmp, parsed[0]));
-				if(stat(tmp2, buf) == 0)
+				if (stat(tmp2, buf) == 0)
 				{
 					parsed[0] = _strdup(tmp2);
 					break;
@@ -143,11 +143,11 @@ void check_path(char **parsed, const paths_t *h)
 			}
 		}
 	}
-	if(juanito)
+	if (juanito)
 		free(juanito);
-	if(tmp)
+	if (tmp)
 		free(tmp);
-	if(tmp2)
+	if (tmp2)
 		free(tmp2);
 }
 
@@ -160,12 +160,12 @@ void check_path(char **parsed, const paths_t *h)
 
 void check_parse(char **parsed)
 {
-	if (strcmp(parsed[0], "exit") == 0)
+	if (_strcmp(parsed[0], "exit") == 0)
 	{
 		if (parsed[1])
 		{
-			if (atoi(parsed[1]))
-				exit(atoi(parsed[1]));
+			if (_atoi(parsed[1]))
+				exit(_atoi(parsed[1]));
 		}
 		exit(0);
 	}
@@ -259,7 +259,7 @@ size_t print_list(const paths_t *h)
 
 paths_t *create_struct(paths_t **head, char *str)
 {
-	paths_t *new_node = (paths_t *) malloc(sizeof(paths_t));
+	paths_t *new_node = (paths_t *)malloc(sizeof(paths_t));
 
 	if (!new_node)
 		return (NULL);
@@ -285,16 +285,16 @@ paths_t *get_path(char **env, char *comparation)
 	paths_t *head;
 
 	juanito = env;
-	while(juanito[i] != NULL)
+	while (juanito[i] != NULL)
 	{
 		j = 0;
 		count = 0;
-		while(juanito[i][j])
+		while (juanito[i][j])
 		{
-			if(juanito[i][j] == comparation[j] && j < 4)
+			if (juanito[i][j] == comparation[j] && j < 4)
 			{
 				count++;
-				if(count == 4 && j == 3)
+				if (count == 4 && j == 3)
 					num = i;
 			}
 			else
@@ -307,13 +307,13 @@ paths_t *get_path(char **env, char *comparation)
 	parse_text_path(tmp, tmp2);
 	i = 0;
 	head = NULL;
-	while(tmp2[i])
+	while (tmp2[i])
 	{
 		create_struct(&head, tmp2[i]);
 		i++;
 	}
 	/*print_list(head);*/
-	return(head);
+	return (head);
 }
 
 /**
@@ -357,7 +357,7 @@ void command_promt(char *envp[])
 		if (bytes_read == -1)
 		{
 			printf("You can't kill JUANITO!!!\n");
-/**
+			/**
  * this line need to be commented
  */
 			exit(98);

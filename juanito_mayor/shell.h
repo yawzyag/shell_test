@@ -23,11 +23,14 @@ typedef struct path_s
 	char *path;
 	struct path_s *next;
 
-}paths_t;
+} paths_t;
 
 size_t print_list(const paths_t *h);
 char *_strdup(char *str);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
+char *_strcpy(char *dest, char *src);
+int _atoi(char *s);
+char *_strtok(char *str, const char *delim);
 
 #endif /* JUANITO_SHELL */
