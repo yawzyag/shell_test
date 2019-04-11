@@ -44,24 +44,24 @@ void free_list(paths_t *head)
 
 void free_parsed(char **parsed)
 {
+	/*int i;
 
 	if (parsed != NULL)
 	{
-		/*for (i = 0; parsed[i];)
-		    {
-		      i++;
-		        }
-			  i - 1;
-			    for (; i != 0; i--)
-			      {
-			        if (parsed[i])
-				  free(parsed[i]);
-				    }
-				      if (parsed[0])
-				      free(parsed[0]);*/
+		for (i = 0; parsed[i];)
+		{
+			i++;
+		}
+		for (; i != 0; i--)
+		{
+			if (parsed[i])
+				free(parsed[i]);
+		}
+		if (parsed[0])
+			free(parsed[0]);*/
 		if (parsed)
 			free(parsed);
-	}
+	
 }
 
 /**
@@ -331,10 +331,10 @@ void command_promt(char *envp[])
 	ssize_t bytes_read;
 	size_t nbytes = 0;
 	char *buffer;
-
-	paths_t *p_path_string = malloc(sizeof(char) * 1024);
+	paths_t *p_path_string;
 	char *path;
 
+	p_path_string = (paths_t *)malloc(sizeof(paths_t));
 	path = "PATH";
 	p_path_string = get_path(envp, path);
 
@@ -350,17 +350,17 @@ void command_promt(char *envp[])
 	{
 		if (isatty(0))
 			printf("$(╯°□°）╯ ");
-		buffer = malloc(sizeof(char) * size_juanito);
+		buffer = (char *)malloc(size_juanito);
 		bytes_read = getline(&buffer, &nbytes, stdin);
-		input_user = malloc(sizeof(char) * size_juanito);
-		parsed_args = malloc(sizeof(char *) * size_juanito);
+		input_user = (char *)malloc(size_juanito);
+		parsed_args = (char **)malloc(size_juanito);
 		if (bytes_read == -1)
 		{
 			printf("You can't kill JUANITO!!!\n");
 			/**
  * this line need to be commented
  */
-			exit(98);
+			exit(0);
 		}
 		if (buffer[0] != '\n')
 		{
@@ -370,8 +370,16 @@ void command_promt(char *envp[])
 			parse_text(input_user, parsed_args);
 			exec_args(parsed_args, envp, p_path_string);
 		}
+		/*if (parsed_args)
+			free_parsed(parsed_args);*/
+		if (input_user) /*funciona ... a veces*/
+			free(input_user);
 	}
-	free_list(p_path_string);
+	if (p_path_string)
+	{
+		free_list(p_path_string);
+		free(p_path_string);
+	}
 }
 
 /**
