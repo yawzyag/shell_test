@@ -11,7 +11,7 @@
 void parse_text(char *str, char **parsed)
 {
 	const char delimiters[] = " \n\"";
-	char *dest;
+	char *dest = NULL;
 	int i = 0;
 
 	dest = strtok(str, delimiters);
@@ -21,6 +21,7 @@ void parse_text(char *str, char **parsed)
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
+
 /*cambio necesario!!!*/
 	/*if (str)
 		free(str);

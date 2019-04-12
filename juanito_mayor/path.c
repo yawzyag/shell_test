@@ -7,32 +7,41 @@ void check_path(char **parsed, paths_t *h)
 	char *juanito = NULL;
 	struct stat *buf;
 
-	if (_strlen(parsed[0]) < 9)
+	buf = malloc(sizeof(struct stat));
+	if (buf == NULL)
+		return;
+	if (!h)
+		return;
+	while (h)
 	{
-		buf = malloc(sizeof(struct stat));
-		if (buf == NULL)
-			return;
-		if (!h)
-			return;
-		while (h)
+		if (h->path)
 		{
-			if (h->path)
+
+			juanito = _strdup(h->path);
+			tmp = strcat(juanito, "/");
+			tmp2 = strcat(tmp, parsed[0]);
+			printf("%s\n", parsed[0]);
+			/*if(tmp2)
+			  {
+			  printf("%s\n",tmp2);
+			  }*/
+			if (stat(tmp2, buf) == 0)
 			{
-				juanito = _strdup(h->path);
-				tmp = _strdup(strcat(juanito, "/"));
-				tmp2 = _strdup(strcat(tmp, parsed[0]));
-				if (stat(tmp2, buf) == 0)
-				{
-					parsed[0] = tmp2;
-					break;
-				}
-				h = h->next;
+				parsed[0] = tmp2;
+				/*if(tmp2)
+				  free(tmp2);*/
+				printf("%s\n", parsed[0]);
+				break;
 			}
+			/*if(tmp2)
+			  free(tmp2);*/
+			h = h->next;
 		}
 	}
-	free(juanito);
-	free(tmp);
-	/*if (tmp2)  "Se necesita, pero hay que esperar y ver"
+	if(buf)
+		free(buf);
+
+	/*if (tmp2)
 	  free(tmp2);*/
 }
 
@@ -51,7 +60,7 @@ void parse_text_path(char *str, char **parsed)
 		i++;
 	}
 	if (dest)
-	  free(dest);
+		free(dest);
 }
 
 
@@ -79,9 +88,10 @@ paths_t *get_path(char **env, char *comparation)
 	char **juanito;
 	int num, count;
 	char *tmp;
-	char **tmp2 = (char **) malloc(sizeof(char) * 1024);
+	char **tmp2;
 	paths_t *head;
 
+	tmp2 = (char **)malloc(sizeof(char *) * 1024);
 	juanito = env;
 	while (juanito[i] != NULL)
 	{
@@ -103,13 +113,15 @@ paths_t *get_path(char **env, char *comparation)
 	}
 	tmp = juanito[num];
 	parse_text_path(tmp, tmp2);
-	i = 0;
 	head = NULL;
+
+	i = 0;
 	while (tmp2[i])
 	{
 		create_struct(&head, tmp2[i]);
 		i++;
-    }
+	}
+	free(tmp2);
 	/*print_list(head);*/
 	return (head);
 }

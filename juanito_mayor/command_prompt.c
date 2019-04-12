@@ -54,19 +54,16 @@ void command_promt(char *envp[])
 		/*input_user = (char *)malloc(size_juanito);
 		if (input_user == NULL)
 		exit(0);*/
-		parsed_args = (char **)malloc(sizeof(char) * 1024);
-		parsed_args[1] = NULL;/*   "Aparentemente esto "soluciona el problema""*/
-		/*printf("parsed[1]: %s\n", parsed_args[1]);
-		if (parsed_args == NULL)
-		exit(0);*/
+/*
+  parsed_args = NULL;*/
+		parsed_args = (char **) malloc(sizeof(char *) * 1024);
+		parsed_args[1] = NULL;/*   "esto soluciona el problema"*/
 		bytes_read = getline(&buffer, &nbytes, stdin);
 		if (bytes_read == -1)
 		{
 			free(buffer);
 			free_list(p_path_string);
-			/*free(p_path_string);*/
 			free(parsed_args);
-			/*free(input_user);*/
 			printf("You can't kill JUANITO!!!\n");
 			/**
 			 * this line need to be commented
@@ -75,18 +72,11 @@ void command_promt(char *envp[])
 		}
 		if (buffer[0] != '\n')
 		{
-			/*input_user = buffer;*/
-			/*_strcpy(input_user, buffer);    "ESTO NUNCA
-			  if (buffer)                  FUE NECESARIO :)"
-			  free(buffer);*/
 			parse_text(buffer, parsed_args);
+			func_exit(buffer, parsed_args, p_path_string);
 			exec_args(parsed_args, envp, p_path_string);
 		}
 		free(buffer);
-		/*if (parsed_args)
-			free_parsed(parsed_args);*/
-		/*if (input_user)*/ /*funciona ... a veces*/
-		/*free(input_user);*/
 	}
 	free(buffer);
 	if (p_path_string)
