@@ -25,14 +25,11 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 	}
 	else if (pid == 0)
 	{
-		printf("aca muere?");
 		process = execve(parsed[0], parsed, env);
-		printf("process %i : ", process);
 		if (process < 0)
 		{
 			printf("Error juanito no process\n");
 		}
-		printf("parsed desde hijo %s\n", parsed[0]);
 		exit(0);
 	}
 	else
