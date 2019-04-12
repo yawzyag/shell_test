@@ -25,7 +25,7 @@ typedef struct path_s
 
 } paths_t;
 
-size_t print_list(const paths_t *h);
+size_t print_list(paths_t *h);
 char *_strdup(char *str);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);

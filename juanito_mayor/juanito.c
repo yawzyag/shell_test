@@ -93,9 +93,9 @@ void parse_text(char *str, char **parsed)
 
 void check_path(char **parsed, paths_t *h)
 {
-	char *tmp = (char *)malloc(sizeof(char) * 1024);
-	char *tmp2 = (char *)malloc(sizeof(char) * 1024);
-	char *juanito = (char *)malloc(sizeof(char) * 1024);
+	char *tmp = NULL;
+	char *tmp2 = NULL;
+	char *juanito = NULL;
 	struct stat *buf;
 
 	if (_strlen(parsed[0]) < 9)
@@ -111,23 +111,20 @@ void check_path(char **parsed, paths_t *h)
 			{
 				juanito = _strdup(h->path);
 				tmp = _strdup(strcat(juanito, "/"));
-
 				tmp2 = _strdup(strcat(tmp, parsed[0]));
 				if (stat(tmp2, buf) == 0)
 				{
-					parsed[0] = _strdup(tmp2);
+					parsed[0] = tmp2;
 					break;
 				}
 				h = h->next;
 			}
 		}
 	}
-	if (juanito)
-		free(juanito);
-	if (tmp)
-		free(tmp);
-	if (tmp2)
-		free(tmp2);
+	free(juanito);
+	free(tmp);
+	/*if (tmp2)  "Se necesita, pero hay que esperar y ver"
+	  free(tmp2);*/
 }
 
 /**
@@ -296,6 +293,7 @@ paths_t *get_path(char **env, char *comparation)
 		create_struct(&head, tmp2[i]);
 		i++;
 	}
+	free(tmp2);
 	/*print_list(head);*/
 	return (head);
 }
