@@ -34,10 +34,9 @@ void free_parsed(char **parsed)
 	/*int i;
 
 	while (parsed[i])
-	{
-		free(parsed[i]);
-		i++;
-		}*/
+	{*/
+
+
 	if (parsed)
 		free(parsed);
 }
@@ -208,12 +207,12 @@ void parse_text_path(char *str, char **parsed)
 	dest = strtok(str, delimiters);
 	while (dest)
 	{
-		parsed[i] = dest;
+		parsed[i] = _strdup(dest);
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
-	/*if (dest)
-	  free(dest);*/
+	if (dest)
+	  free(dest);
 }
 
 size_t print_list(paths_t *h)
@@ -322,8 +321,8 @@ void sigintHandler(int nt)
 
 void command_promt(char *envp[])
 {
-	/*int size_juanito = 1024;*/
-	/*char *input_user;*/
+	int size_juanito = 1024;
+	char *input_user;
 	char **parsed_args;
 	ssize_t bytes_read;
 	size_t nbytes = 0;
@@ -331,8 +330,7 @@ void command_promt(char *envp[])
 	paths_t *p_path_string;
 	char *path;
 
-	p_path_string = NULL;
-		/*(paths_t *)malloc(sizeof(paths_t));*/
+	p_path_string = (paths_t *)malloc(sizeof(paths_t));
 	path = "PATH";
 	p_path_string = get_path(envp, path);
 
@@ -349,22 +347,19 @@ void command_promt(char *envp[])
 		if (isatty(0))
 			printf("$(╯°□°）╯ ");
 		buffer = NULL;
-		/*input_user = (char *)malloc(size_juanito);
+		input_user = (char *)malloc(size_juanito);
 		if (input_user == NULL)
-		exit(0);*/
-		parsed_args = (char **)malloc(sizeof(char) * 1024);
-		parsed_args[1] = NULL;/*   "Aparentemente esto "soluciona el problema""*/
-		/*printf("parsed[1]: %s\n", parsed_args[1]);
+			exit(0);
+		parsed_args = (char **)malloc(size_juanito);
 		if (parsed_args == NULL)
-		exit(0);*/
+			exit(0);
 		bytes_read = getline(&buffer, &nbytes, stdin);
 		if (bytes_read == -1)
 		{
-			free(buffer);
-			free_list(p_path_string);
-			/*free(p_path_string);*/
-			free(parsed_args);
-			/*free(input_user);*/
+				free_list(p_path_string);
+				free(p_path_string);
+				/*free(parsed_args);*/
+				free(input_user);
 			printf("You can't kill JUANITO!!!\n");
 			/**
 			 * this line need to be commented
@@ -373,18 +368,18 @@ void command_promt(char *envp[])
 		}
 		if (buffer[0] != '\n')
 		{
-			/*input_user = buffer;*/
+			input_user = buffer;
 			/*_strcpy(input_user, buffer);    "ESTO NUNCA
 			  if (buffer)                  FUE NECESARIO :)"
 			  free(buffer);*/
-			parse_text(buffer, parsed_args);
+			parse_text(input_user, parsed_args);
 			exec_args(parsed_args, envp, p_path_string);
 		}
-		free(buffer);
+
 		/*if (parsed_args)
 			free_parsed(parsed_args);*/
-		/*if (input_user)*/ /*funciona ... a veces*/
-		/*free(input_user);*/
+		if (input_user) /*funciona ... a veces*/
+		  free(input_user);
 	}
 	free(buffer);
 	if (p_path_string)
