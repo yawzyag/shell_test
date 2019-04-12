@@ -1,17 +1,4 @@
 #include "shell.h"
-/**
- * sigintHandler - Function to anulate the ^C
- * Description: There's no parameters inside this function
- *
- * Return: No returns in this function
- */
-
-void sigintHandler(int nt)
-{
-	(void)nt;
-	printf("\n$(╯°□°）╯");
-	fflush(stdout);
-}
 
 /**
  * free_list - Function get a line from stdin
@@ -54,6 +41,7 @@ void free_parsed(char **parsed)
 		free(parsed);
 }
 
+
 /**
  * takeInput - Function to take the input and copy it.
  * @str: Copy of the string inside the function
@@ -61,7 +49,7 @@ void free_parsed(char **parsed)
  *
  * Return: always 1 if success, in other case 0
  */
-
+/* "NO HACE ABSOLUTAMENTE NADA DIFERENTE A COPIAR UN STRING :)"
 int takeInput(char *str, char *buffer)
 {
 	if (_strlen(buffer) != 0)
@@ -73,7 +61,7 @@ int takeInput(char *str, char *buffer)
 	{
 		return (1);
 	}
-}
+}*/
 
 /**
  * parse_text - Function to parse a string by their tokens
@@ -92,7 +80,7 @@ void parse_text(char *str, char **parsed)
 	dest = strtok(str, delimiters);
 	while (dest)
 	{
-		parsed[i] = _strdup(dest);
+		parsed[i] = dest;
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
@@ -149,7 +137,7 @@ void check_path(char **parsed, paths_t *h)
  * Return: No returns in this function
  */
 
-void check_parse(char **parsed, paths_t *p_path_string)
+void func_exit(char **parsed, paths_t *p_path_string)
 {
 	if (_strcmp(parsed[0], "exit") == 0)
 	{
@@ -182,7 +170,7 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 	/**
 	 * Forking a child
 	 */
-	check_parse(parsed, p_path_string);
+	func_exit(parsed, p_path_string);
 	check_path(parsed, p_path_string);
 	/*print_list(p_path_string);*/
 	pid = fork();
@@ -313,6 +301,20 @@ paths_t *get_path(char **env, char *comparation)
 }
 
 /**
+ * sigintHandler - Function to anulate the ^C
+ * Description: There's no parameters inside this function
+ *
+ * Return: No returns in this function
+ */
+
+void sigintHandler(int nt)
+{
+	(void)nt;
+	printf("\n$(╯°□°）╯");
+	fflush(stdout);
+}
+
+/**
  * command_promt - Function to open a prompt for our shell
  * @envp: Receive the arguments passed to shell
  *
@@ -346,34 +348,32 @@ void command_promt(char *envp[])
 	{
 		if (isatty(0))
 			printf("$(╯°□°）╯ ");
-		buffer = (char *)malloc(size_juanito);
-		if (buffer == NULL)
-			exit(0);
-		bytes_read = getline(&buffer, &nbytes, stdin);
+		buffer = NULL;
 		input_user = (char *)malloc(size_juanito);
 		if (input_user == NULL)
 			exit(0);
 		parsed_args = (char **)malloc(size_juanito);
 		if (parsed_args == NULL)
 			exit(0);
+		bytes_read = getline(&buffer, &nbytes, stdin);
 		if (bytes_read == -1)
 		{
-			if (p_path_string)
-			{
 				free_list(p_path_string);
 				free(p_path_string);
-			}
+				/*free(parsed_args);*/
+				free(input_user);
 			printf("You can't kill JUANITO!!!\n");
 			/**
- * this line need to be commented
- */
+			 * this line need to be commented
+			 */
 			exit(0);
 		}
 		if (buffer[0] != '\n')
 		{
-			takeInput(input_user, buffer);
-			if (buffer)
-				free(buffer);
+			input_user = buffer;
+			/*_strcpy(input_user, buffer);    "ESTO NUNCA
+			  if (buffer)                  FUE NECESARIO :)"
+			  free(buffer);*/
 			parse_text(input_user, parsed_args);
 			exec_args(parsed_args, envp, p_path_string);
 		}
@@ -383,6 +383,7 @@ void command_promt(char *envp[])
 		if (input_user) /*funciona ... a veces*/
 		  free(input_user);
 	}
+	free(buffer);
 	if (p_path_string)
 	{
 		free_list(p_path_string);
