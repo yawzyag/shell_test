@@ -46,22 +46,12 @@ void free_parsed(char **parsed)
 {
 	/*int i;
 
-	if (parsed != NULL)
-	{
-		for (i = 0; parsed[i];)
-		{
-			i++;
-		}
-		for (; i != 0; i--)
-		{
-			if (parsed[i])
-				free(parsed[i]);
-		}
-		if (parsed[0])
-			free(parsed[0]);*/
-		if (parsed)
-			free(parsed);
-	
+	while (parsed[i])
+	{*/
+
+
+	if (parsed)
+		free(parsed);
 }
 
 /**
@@ -106,17 +96,18 @@ void parse_text(char *str, char **parsed)
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
-	if (str)
+/*cambio necesario!!!*/
+	/*if (str)
 		free(str);
 	if (dest)
-		free(dest);
+	free(dest);*/
 }
 
-void check_path(char **parsed, const paths_t *h)
+void check_path(char **parsed, paths_t *h)
 {
-	char *tmp = malloc(sizeof(char) * 1024);
-	char *tmp2 = malloc(sizeof(char) * 1024);
-	char *juanito = malloc(sizeof(char) * 1024);
+	char *tmp = (char *)malloc(sizeof(char) * 1024);
+	char *tmp2 = (char *)malloc(sizeof(char) * 1024);
+	char *juanito = (char *)malloc(sizeof(char) * 1024);
 	struct stat *buf;
 
 	if (_strlen(parsed[0]) < 9)
@@ -158,10 +149,15 @@ void check_path(char **parsed, const paths_t *h)
  * Return: No returns in this function
  */
 
-void check_parse(char **parsed)
+void check_parse(char **parsed, paths_t *p_path_string)
 {
 	if (_strcmp(parsed[0], "exit") == 0)
 	{
+		if (p_path_string)
+		{
+			free_list(p_path_string);
+			free(p_path_string);
+		}
 		if (parsed[1])
 		{
 			if (_atoi(parsed[1]))
@@ -179,14 +175,14 @@ void check_parse(char **parsed)
  * Return: No returns in this function
  */
 
-void exec_args(char **parsed, char **env, const paths_t *p_path_string)
+void exec_args(char **parsed, char **env, paths_t *p_path_string)
 {
 	int process;
 	pid_t pid;
 	/**
 	 * Forking a child
 	 */
-	check_parse(parsed);
+	check_parse(parsed, p_path_string);
 	check_path(parsed, p_path_string);
 	/*print_list(p_path_string);*/
 	pid = fork();
@@ -231,10 +227,10 @@ void parse_text_path(char *str, char **parsed)
 		i++;
 	}
 	if (dest)
-		free(dest);
+	  free(dest);
 }
 
-size_t print_list(const paths_t *h)
+size_t print_list(paths_t *h)
 {
 	int counter = 0;
 
@@ -281,7 +277,7 @@ paths_t *get_path(char **env, char *comparation)
 	char **juanito;
 	int num, count;
 	char *tmp;
-	char **tmp2 = malloc(sizeof(char *) * 1024);
+	char **tmp2 = (char **) malloc(sizeof(char) * 1024);
 	paths_t *head;
 
 	juanito = env;
@@ -351,11 +347,22 @@ void command_promt(char *envp[])
 		if (isatty(0))
 			printf("$(╯°□°）╯ ");
 		buffer = (char *)malloc(size_juanito);
+		if (buffer == NULL)
+			exit(0);
 		bytes_read = getline(&buffer, &nbytes, stdin);
 		input_user = (char *)malloc(size_juanito);
+		if (input_user == NULL)
+			exit(0);
 		parsed_args = (char **)malloc(size_juanito);
+		if (parsed_args == NULL)
+			exit(0);
 		if (bytes_read == -1)
 		{
+			if (p_path_string)
+			{
+				free_list(p_path_string);
+				free(p_path_string);
+			}
 			printf("You can't kill JUANITO!!!\n");
 			/**
  * this line need to be commented
@@ -370,10 +377,11 @@ void command_promt(char *envp[])
 			parse_text(input_user, parsed_args);
 			exec_args(parsed_args, envp, p_path_string);
 		}
+
 		/*if (parsed_args)
 			free_parsed(parsed_args);*/
 		if (input_user) /*funciona ... a veces*/
-			free(input_user); 
+		  free(input_user);
 	}
 	if (p_path_string)
 	{
