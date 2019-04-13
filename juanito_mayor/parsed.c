@@ -21,6 +21,7 @@ void parse_text(char *str, char **parsed)
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
+	parsed[i] = NULL;
 
 /*cambio necesario!!!*/
 	/*if (str)

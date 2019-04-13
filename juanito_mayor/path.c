@@ -53,11 +53,11 @@ void parse_text_path(char *str, char **parsed)
     i = 0;
     while (dest)
     {
-        parsed[i] = malloc(sizeof(char) * strlen(dest));
-        parsed[i] = strdup(dest);
+        parsed[i] = dest;
         dest = strtok(NULL, delimiters);
         i++;
     }
+    parsed[i] = NULL;
     if (dest)
         free(dest);
 }
@@ -100,11 +100,6 @@ paths_t *get_path(void)
     }
     i = 0;
 
-    while (tmp2[i])
-    {
-        free(tmp2[i]);
-        i++;
-    }
     if (tmp2)
         free(tmp2);
     /*print_list(head);*/
