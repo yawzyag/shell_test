@@ -45,14 +45,16 @@ void check_path(char **parsed, paths_t *h)
 
 void parse_text_path(char *str, char **parsed)
 {
-    const char delimiters[] = "=:";
+    const char delimiters[] = "=:;";
     char *dest = NULL;
-    int i = 0;
+    int i;
 
     dest = strtok(str, delimiters);
+    i = 0;
     while (dest)
     {
-        parsed[i] = dest;
+        parsed[i] = malloc(sizeof(char) * strlen(dest));
+        parsed[i] = strdup(dest);
         dest = strtok(NULL, delimiters);
         i++;
     }
@@ -78,37 +80,15 @@ paths_t *create_struct(paths_t **head, char *str)
     return (new_node);
 }
 
-paths_t *get_path(char **env, char *comparation)
+paths_t *get_path(void)
 {
-    int i = 0, j = 0;
-    char **juanito = NULL;
-    int num = 0, count = 0;
+    int i;
     char *tmp = NULL;
-    char **tmp2 = NULL;
     paths_t *head;
 
-    tmp2 = (char **)malloc(sizeof(char *) * 1024);
-    juanito = env;
-    while (juanito[i] != NULL)
-    {
-        j = 0;
-        count = 0;
-        while (juanito[i][j])
-        {
-            if (juanito[i][j] == comparation[j] && j < 4)
-            {
-                count++;
-                if (count == 4 && j == 3)
-                    num = i;
-            }
-            else
-                count = 0;
-            j++;
-        }
-        i++;
-    }
+    tmp = getenv("PATH");
 
-    tmp = juanito[num];
+    char **tmp2 = malloc(sizeof(char *) * (_strlen(tmp) + 1));
     parse_text_path(tmp, tmp2);
     head = NULL;
 
@@ -118,7 +98,15 @@ paths_t *get_path(char **env, char *comparation)
         create_struct(&head, tmp2[i]);
         i++;
     }
-    free(tmp2);
+    i = 0;
+
+    while (tmp2[i])
+    {
+        free(tmp2[i]);
+        i++;
+    }
+    if (tmp2)
+        free(tmp2);
     /*print_list(head);*/
     return (head);
 }

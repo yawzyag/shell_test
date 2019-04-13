@@ -32,16 +32,18 @@ int _strcmp(char *s1, char *s2);
 char *_strcpy(char *dest, char *src);
 int _atoi(char *s);
 char *_strtok(char *str, const char *delim);
-void command_promt(char *envp[]);
+void command_promt(char **argv, char *envp[]);
 void sigintHandler(int nt);
-paths_t *get_path(char **env, char *comparation);
+paths_t *get_path(void);
 paths_t *create_struct(paths_t **head, char *str);
 void parse_text_path(char *str, char **parsed);
-void exec_args(char **parsed, char **env, paths_t *p_path_string);
+void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string);
 void func_exit(char *buffer, char **parsed, paths_t *p_path_string);
 void check_path(char **parsed, paths_t *h);
 void parse_text(char *str, char **parsed);
 void free_list(paths_t *head);
 void free_parsed(char **parsed);
+
+extern int exit_num;
 
 #endif /* JUANITO_SHELL */

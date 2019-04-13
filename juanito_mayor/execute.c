@@ -7,9 +7,9 @@
  * Return: No returns in this function
  */
 
-void exec_args(char **parsed, char **env, paths_t *p_path_string)
+void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 {
-	int process;
+	int process, status = 0;
 	pid_t pid;
 	/**
 	 * Forking a child
@@ -20,7 +20,8 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 
 	if (pid == -1)
 	{
-		printf("\nFailed fork in juanito :c..");
+		perror("Fork failed");
+		exit_num = 1;
 		_exit(1);
 	}
 	else if (pid == 0)
@@ -28,8 +29,14 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 		process = execve(parsed[0], parsed, env);
 		if (process < 0)
 		{
-			printf("Error juanito no process\n");
-			_exit(126);
+			write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+			write(STDERR_FILENO, ": ", 2);
+			write(STDERR_FILENO, "1", 1);
+			write(STDERR_FILENO, ": ", 2);
+			write(STDERR_FILENO, parsed[0], _strlen(parsed[0]));
+			write(STDERR_FILENO, ": not found\n", 13);
+			exit_num = 127;
+			_exit(127);
 		}
 		_exit(0);
 	}
@@ -38,8 +45,7 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 		/**
 		 * waiting for child to terminate
 		 */
-		wait(NULL);
-		if (parsed)
-			free_parsed(parsed);
+		exit_num = 0;
+		wait(&status);
 	}
 }

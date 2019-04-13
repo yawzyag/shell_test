@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * main - Entry Point
  * @ac: counter of arguments
@@ -13,7 +14,7 @@ int main(int ac, char **av, char *envp[])
 {
         (void)ac;
         (void)av;
-        command_promt(envp);
+        command_promt(av, envp);
 
         return (0);
 }

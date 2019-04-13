@@ -1,5 +1,7 @@
 #include "shell.h"
 
+int exit_num = 0;
+
 /**
  * sigintHandler - Function to anulate the ^C
  * Description: There's no parameters inside this function
@@ -10,7 +12,7 @@
 void sigintHandler(int nt)
 {
 	(void)nt;
-	printf("\n$(╯°□°）╯");
+	write(STDOUT_FILENO, "\n$(╯°□°）╯ ", _strlen("\n$(╯°□°）╯ "));
 	fflush(stdout);
 }
 
@@ -21,7 +23,7 @@ void sigintHandler(int nt)
  * Return: No returns in this function
  */
 
-void command_promt(char *envp[])
+void command_promt(char **argv, char *envp[])
 {
 	/*int size_juanito = 1024;*/
 	/*char *input_user;*/
@@ -30,11 +32,9 @@ void command_promt(char *envp[])
 	size_t nbytes = 0;
 	char *buffer;
 	paths_t *p_path_string;
-
-	p_path_string = NULL;
 	/*(paths_t *)malloc(sizeof(paths_t));*/
 
-	p_path_string = get_path(envp, "PATH");
+	p_path_string = get_path();
 
 	/**
 	 * char cwd[1024];
@@ -69,14 +69,17 @@ void command_promt(char *envp[])
 			/**
 			 * this line need to be commented
 			 */
-			exit(0);
+			/*write(STDOUT_FILENO, "\n", _strlen("\n"));*/
+			exit(exit_num);
 		}
 		if (buffer[0] != '\n' && buffer[0])
 		{
 			parse_text(buffer, parsed_args);
 			func_exit(buffer, parsed_args, p_path_string);
-			exec_args(parsed_args, envp, p_path_string);
+			exec_args(argv, parsed_args, envp, p_path_string);
 		}
+		if (parsed_args)
+			free_parsed(parsed_args);
 		free(buffer);
 	}
 	free(buffer);
