@@ -1,6 +1,5 @@
 #include "shell.h"
 
-
 /**
  * sigintHandler - Function to anulate the ^C
  * Description: There's no parameters inside this function
@@ -34,7 +33,7 @@ void command_promt(char *envp[])
 	char *path;
 
 	p_path_string = NULL;
-		/*(paths_t *)malloc(sizeof(paths_t));*/
+	/*(paths_t *)malloc(sizeof(paths_t));*/
 	path = "PATH";
 	p_path_string = get_path(envp, path);
 
@@ -50,27 +49,31 @@ void command_promt(char *envp[])
 	{
 		if (isatty(0))
 			printf("$(╯°□°）╯ ");
+		/*write(STDOUT_FILENO, "$(╯°□°）╯ ", _strlen("$(╯°□°）╯ "));*/
 		buffer = NULL;
 		/*input_user = (char *)malloc(size_juanito);
 		if (input_user == NULL)
 		exit(0);*/
-/*
+		/*
   parsed_args = NULL;*/
-		parsed_args = (char **) malloc(sizeof(char *) * 1024);
-		parsed_args[1] = NULL;/*   "esto soluciona el problema"*/
+		parsed_args = (char **)malloc(sizeof(char *) * 1024);
+		parsed_args[1] = NULL; /*   "esto soluciona el problema"*/
 		bytes_read = getline(&buffer, &nbytes, stdin);
 		if (bytes_read == -1)
 		{
-			free(buffer);
-			free_list(p_path_string);
-			free(parsed_args);
+			if (buffer)
+				free(buffer);
+			if (p_path_string)
+				free_list(p_path_string);
+			if (parsed_args)
+				free(parsed_args);
 			printf("You can't kill JUANITO!!!\n");
 			/**
 			 * this line need to be commented
 			 */
 			exit(0);
 		}
-		if (buffer[0] != '\n')
+		if (buffer[0] != '\n' && buffer[0])
 		{
 			parse_text(buffer, parsed_args);
 			func_exit(buffer, parsed_args, p_path_string);

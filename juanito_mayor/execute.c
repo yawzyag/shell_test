@@ -21,7 +21,7 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 	if (pid == -1)
 	{
 		printf("\nFailed fork in juanito :c..");
-		return;
+		_exit(1);
 	}
 	else if (pid == 0)
 	{
@@ -29,8 +29,9 @@ void exec_args(char **parsed, char **env, paths_t *p_path_string)
 		if (process < 0)
 		{
 			printf("Error juanito no process\n");
+			_exit(126);
 		}
-		exit(0);
+		_exit(0);
 	}
 	else
 	{
