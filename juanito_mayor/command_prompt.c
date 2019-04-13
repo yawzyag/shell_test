@@ -30,12 +30,11 @@ void command_promt(char *envp[])
 	size_t nbytes = 0;
 	char *buffer;
 	paths_t *p_path_string;
-	char *path;
 
 	p_path_string = NULL;
 	/*(paths_t *)malloc(sizeof(paths_t));*/
-	path = "PATH";
-	p_path_string = get_path(envp, path);
+
+	p_path_string = get_path(envp, "PATH");
 
 	/**
 	 * char cwd[1024];
@@ -48,8 +47,7 @@ void command_promt(char *envp[])
 	while (1)
 	{
 		if (isatty(0))
-			printf("$(╯°□°）╯ ");
-		/*write(STDOUT_FILENO, "$(╯°□°）╯ ", _strlen("$(╯°□°）╯ "));*/
+			write(STDOUT_FILENO, "$(╯°□°）╯ ", _strlen("$(╯°□°）╯ "));
 		buffer = NULL;
 		/*input_user = (char *)malloc(size_juanito);
 		if (input_user == NULL)
@@ -67,7 +65,7 @@ void command_promt(char *envp[])
 				free_list(p_path_string);
 			if (parsed_args)
 				free(parsed_args);
-			printf("You can't kill JUANITO!!!\n");
+			/*printf("You can't kill JUANITO!!!\n");*/
 			/**
 			 * this line need to be commented
 			 */
