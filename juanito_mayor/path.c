@@ -1,6 +1,6 @@
 #include "shell.h"
 
-void check_path(char **parsed, paths_t *h)
+char *check_path(char *parsed, paths_t *h)
 {
     char *tmp = NULL;
     char *tmp2 = NULL;
@@ -9,38 +9,33 @@ void check_path(char **parsed, paths_t *h)
 
     buf = malloc(sizeof(struct stat));
     if (buf == NULL)
-        return;
+        return NULL;
     if (!h)
-        return;
+        return NULL;
     while (h)
     {
         if (h->path)
         {
-
-            juanito = _strdup(h->path);
+            juanito = h->path;
             tmp = _strdup(_strcat(juanito, "/"));
-            tmp2 = _strdup(_strcat(tmp, parsed[0]));
+            tmp2 = _strdup(_strcat(tmp, parsed));
             /*if (tmp2)
             {
                 printf("%p\n", tmp2);
             }*/
+
+            free(tmp);
             if (stat(tmp2, buf) == 0)
             {
-                parsed[0] = tmp2;
-                break;
+                free(buf);
+                return (tmp2);
             }
-            if (tmp2)
-                free(tmp2);
+            free(tmp2);
             h = h->next;
         }
     }
-    if (buf)
-        free(buf);
-    if (tmp)
-        free(tmp);
-    if (juanito)
-        free(juanito);
-    /**/
+    free(buf);
+    return (parsed);
 }
 
 void parse_text_path(char *str, char **parsed)

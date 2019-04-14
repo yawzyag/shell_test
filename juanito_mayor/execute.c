@@ -10,11 +10,14 @@
 void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 {
 	int process, status = 0;
+	char *parse = NULL;
 	pid_t pid;
+
+	parse = parsed[0];
 	/**
 	 * Forking a child
 	 */
-	check_path(parsed, p_path_string);
+	parse = check_path(parse, p_path_string);
 	/*print_list(p_path_string);*/
 	pid = fork();
 
@@ -26,7 +29,7 @@ void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 	}
 	else if (pid == 0)
 	{
-		process = execve(parsed[0], parsed, env);
+		process = execve(parse, parsed, env);
 		if (process < 0)
 		{
 			write(STDERR_FILENO, argv[0], _strlen(argv[0]));
@@ -47,5 +50,6 @@ void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 		 */
 		exit_num = 0;
 		wait(&status);
+		free(parse);
 	}
 }
