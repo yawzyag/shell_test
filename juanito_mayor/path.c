@@ -5,6 +5,7 @@ void check_path(char **parsed, paths_t *h)
     char *tmp = NULL;
     char *tmp2 = NULL;
     char *juanito = NULL;
+    int contador;
     struct stat *buf;
 
     buf = malloc(sizeof(struct stat));
@@ -24,22 +25,23 @@ void check_path(char **parsed, paths_t *h)
             {
                 printf("%p\n", tmp2);
             }*/
+    if (tmp)
+        free(tmp);
+    if (juanito)
+        free(juanito);
             if (stat(tmp2, buf) == 0)
             {
-                parsed[0] = tmp2;
-                break;
+		    for (contador = 0; tmp2[contador]; contador++)
+			    parsed[0][contador] = tmp2[contador];
+		    break;
             }
-            if (tmp2)
-                free(tmp2);
+	    /*if (tmp2)*/
+	    free(tmp2);
             h = h->next;
         }
     }
     if (buf)
         free(buf);
-    if (tmp)
-        free(tmp);
-    if (juanito)
-        free(juanito);
     /**/
 }
 
