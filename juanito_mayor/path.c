@@ -85,10 +85,10 @@ paths_t *get_path(void)
     int i;
     char *tmp = NULL;
     paths_t *head;
+    char **tmp2;
 
     tmp = getenv("PATH");
-
-    char **tmp2 = malloc(sizeof(char *) * (_strlen(tmp) + 1));
+    tmp2 = malloc(sizeof(char *) * (_strlen(tmp) + 1));
     parse_text_path(tmp, tmp2);
     head = NULL;
 
