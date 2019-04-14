@@ -34,7 +34,7 @@ int _atoi(char *s);
 char *_strtok(char *str, const char *delim);
 void command_promt(char **argv, char *envp[]);
 void sigintHandler(int nt);
-paths_t *get_path(void);
+paths_t *get_path(char **env);
 paths_t *create_struct(paths_t **head, char *str);
 void parse_text_path(char *str, char **parsed);
 void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string);

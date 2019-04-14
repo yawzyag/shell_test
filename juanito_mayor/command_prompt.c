@@ -34,7 +34,7 @@ void command_promt(char **argv, char *envp[])
 	paths_t *p_path_string;
 	/*(paths_t *)malloc(sizeof(paths_t));*/
 
-	p_path_string = get_path();
+	p_path_string = get_path(envp);
 
 	/**
 	 * char cwd[1024];
@@ -79,7 +79,7 @@ void command_promt(char **argv, char *envp[])
 			exec_args(argv, parsed_args, envp, p_path_string);
 		}
 		if (parsed_args)
-			free_parsed(parsed_args);
+		  free_parsed(parsed_args);
 		free(buffer);
 	}
 	free(buffer);
