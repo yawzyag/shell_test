@@ -43,6 +43,7 @@ void check_path(char **parsed, paths_t *h);
 void parse_text(char *str, char **parsed);
 void free_list(paths_t *head);
 void free_parsed(char **parsed);
+char *_strcat(char *dest, char *src);
 
 extern int exit_num;
 

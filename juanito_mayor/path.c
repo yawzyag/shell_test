@@ -18,8 +18,8 @@ void check_path(char **parsed, paths_t *h)
         {
 
             juanito = _strdup(h->path);
-            tmp = strdup(strcat(juanito, "/"));
-            tmp2 = strdup(strcat(tmp, parsed[0]));
+            tmp = _strdup(_strcat(juanito, "/"));
+            tmp2 = _strdup(_strcat(tmp, parsed[0]));
             /*if (tmp2)
             {
                 printf("%p\n", tmp2);
