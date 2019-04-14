@@ -24,18 +24,20 @@ char *check_path(char *parsed, paths_t *h)
                 printf("%p\n", tmp2);
             }*/
 
-            free(tmp);
+            /*free(tmp);*/
             if (stat(tmp2, buf) == 0)
             {
+                printf("check\n");
                 free(buf);
                 return (tmp2);
             }
-            free(tmp2);
+           /* free(tmp2);*/
             h = h->next;
         }
     }
+
+    printf("check\n");
     free(buf);
-    printf("%p\n", parsed);
     return (parsed);
 }
 
@@ -78,34 +80,34 @@ paths_t *create_struct(paths_t **head, char *str)
 
 paths_t *get_path(char **env)
 {
-	int i = 0, j = 0;
-	char **juanito;
-	int num, count;
-	char *tmp;
-	char **tmp2 = NULL;
-	paths_t *head;
-	char * comparation = "PATH";
+    int i = 0, j = 0;
+    char **juanito;
+    int num, count;
+    char *tmp;
+    char **tmp2 = NULL;
+    paths_t *head;
+    char *comparation = "PATH";
 
-	juanito = env;
-	while (juanito[i] != NULL)
-	{
-		j = 0;
-		count = 0;
-		while (juanito[i][j])
-		{
-			if (juanito[i][j] == comparation[j] && j < 4)
-			{
-				count++;
-				if (count == 4 && j == 3)
-					num = i;
-			}
-			else
-				count = 0;
-			j++;
-		}
-		i++;
-	}
-	tmp = juanito[num];
+    juanito = env;
+    while (juanito[i] != NULL)
+    {
+        j = 0;
+        count = 0;
+        while (juanito[i][j])
+        {
+            if (juanito[i][j] == comparation[j] && j < 4)
+            {
+                count++;
+                if (count == 4 && j == 3)
+                    num = i;
+            }
+            else
+                count = 0;
+            j++;
+        }
+        i++;
+    }
+    tmp = juanito[num];
 
     tmp2 = malloc(sizeof(char *) * (_strlen(tmp) + 1));
     parse_text_path(tmp, tmp2);

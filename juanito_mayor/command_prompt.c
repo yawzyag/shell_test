@@ -55,7 +55,7 @@ void command_promt(char **argv, char *envp[])
 		/*
   parsed_args = NULL;*/
 		parsed_args = (char **)malloc(sizeof(char *) * 1024);
-		parsed_args[1] = NULL; /*   "esto soluciona el problema"*/
+		/*parsed_args[1] = NULL;    "esto soluciona el problema"*/
 		bytes_read = getline(&buffer, &nbytes, stdin);
 		if (bytes_read == -1)
 		{
@@ -79,7 +79,7 @@ void command_promt(char **argv, char *envp[])
 			exec_args(argv, parsed_args, envp, p_path_string);
 		}
 		if (parsed_args)
-		  free_parsed(parsed_args);
+			free_parsed(parsed_args);
 		free(buffer);
 	}
 	free(buffer);

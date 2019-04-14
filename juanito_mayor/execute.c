@@ -30,7 +30,6 @@ void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 	}
 	else if (pid == 0)
 	{
-	printf("check\n");
 		process = execve(parse, parsed, env);
 		if (process < 0)
 		{
@@ -51,6 +50,7 @@ void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 		 * waiting for child to terminate
 		 */
 		exit_num = 0;
+		free(parse);
 		wait(&status);
 		/*free(parse);*/
 	}

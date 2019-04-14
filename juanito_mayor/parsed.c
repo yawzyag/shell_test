@@ -12,18 +12,22 @@ void parse_text(char *str, char **parsed)
 {
 	const char delimiters[] = " \n\"";
 	char *dest = NULL;
+	char **tmp = NULL;
 	int i = 0;
+
+	tmp = parsed;
 
 	dest = strtok(str, delimiters);
 	while (dest)
 	{
-		parsed[i] = dest;
+		tmp[i] = dest;
 		dest = strtok(NULL, delimiters);
 		i++;
 	}
-	parsed[i] = NULL;
-
-/*cambio necesario!!!*/
+	tmp[i] = NULL;
+	parsed = tmp;
+	free(dest);
+	/*cambio necesario!!!*/
 	/*if (str)
 		free(str);
 	if (dest)
