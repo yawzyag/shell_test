@@ -38,7 +38,7 @@ void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string)
 			exit_num = 127;
 			_exit(127);
 		}
-		_exit(0);
+		_exit(exit_num);
 	}
 	else
 	{

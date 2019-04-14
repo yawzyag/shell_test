@@ -34,7 +34,7 @@ void command_promt(char **argv, char *envp[])
 	paths_t *p_path_string;
 	/*(paths_t *)malloc(sizeof(paths_t));*/
 
-	p_path_string = get_path();
+	p_path_string = get_path(envp);
 
 	/**
 	 * char cwd[1024];

@@ -29,8 +29,8 @@ void check_path(char **parsed, paths_t *h)
                 parsed[0] = tmp2;
                 break;
             }
-            if (tmp2)
-                free(tmp2);
+/*            if (tmp2)
+                free(tmp2);*/
             h = h->next;
         }
     }
@@ -80,15 +80,37 @@ paths_t *create_struct(paths_t **head, char *str)
     return (new_node);
 }
 
-paths_t *get_path(void)
+paths_t *get_path(char **env)
 {
-    int i;
-    char *tmp = NULL;
-    paths_t *head;
-    char **tmp2;
+	int i = 0, j = 0;
+	char **juanito;
+	int num, count;
+	char *tmp;
+	char **tmp2 = NULL;
+	paths_t *head;
+	char * comparation = "PATH";
 
-    tmp = getenv("PATH");
-    tmp2 = malloc(sizeof(char *) * (_strlen(tmp) + 1));
+	juanito = env;
+	while (juanito[i] != NULL)
+	{
+		j = 0;
+		count = 0;
+		while (juanito[i][j])
+		{
+			if (juanito[i][j] == comparation[j] && j < 4)
+			{
+				count++;
+				if (count == 4 && j == 3)
+					num = i;
+			}
+			else
+				count = 0;
+			j++;
+		}
+		i++;
+	}
+	tmp = juanito[num];
+    tmp2 = malloc(sizeof(char *) * 1024);
     parse_text_path(tmp, tmp2);
     head = NULL;
 
