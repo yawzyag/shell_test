@@ -1,46 +1,59 @@
 #include "shell.h"
 
-void check_path(char **parsed, paths_t *h)
+char *check_path(char **parsed, paths_t *h)
 {
     char *tmp = NULL;
     char *tmp2 = NULL;
     char *juanito = NULL;
-    struct stat *buf;
+    struct stat buf;
+    char *slash = "/";
+    char *var;
 
-    buf = malloc(sizeof(struct stat));
-    if (buf == NULL)
-        return;
+    var = parsed[0];
+
+    tmp = str_concat(slash, var);
+    printf("%s\n", tmp);
+    /* buf = malloc(sizeof(struct stat));*/
+    /*if (buf == NULL)
+      return;*/
     if (!h)
-        return;
+	    return (NULL);
     while (h)
     {
         if (h->path)
         {
-
             juanito = _strdup(h->path);
-            tmp = _strdup(_strcat(juanito, "/"));
-            tmp2 = _strdup(_strcat(tmp, parsed[0]));
+            tmp2 = (str_concat(juanito, tmp));
             /*if (tmp2)
             {
                 printf("%p\n", tmp2);
             }*/
-            if (stat(tmp2, buf) == 0)
+            if (stat(tmp2, &buf) == 0)
             {
-                parsed[0] = tmp2;
-                break;
+		    free(juanito);
+		    free(tmp);
+		    return (tmp2);
+		printf("%s\n%s\n", tmp2, parsed[0]);
+		/*free(juanito);*/
+		break;
             }
+
 /*            if (tmp2)
                 free(tmp2);*/
             h = h->next;
         }
+	free(tmp2);
+	free(juanito);
+	/*	if (tmp)
+		free(tmp);
+	if (juanito)
+	*/	/*free(juanito);*/
     }
-    if (buf)
+    free(tmp);
+    return(parsed[0]);
+    /* if (buf)
         free(buf);
-    if (tmp)
-        free(tmp);
-    if (juanito)
-        free(juanito);
-    /**/
+    */
 }
 
 void parse_text_path(char *str, char **parsed)

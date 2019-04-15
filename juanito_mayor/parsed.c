@@ -22,10 +22,4 @@ void parse_text(char *str, char **parsed)
 		i++;
 	}
 	parsed[i] = NULL;
-
-/*cambio necesario!!!*/
-	/*if (str)
-		free(str);
-	if (dest)
-	free(dest);*/
 }

@@ -8,6 +8,8 @@
 
 void func_exit(char *buffer, char **parsed, paths_t *p_path_string)
 {
+	int exit_num = 0;
+
 	if (_strcmp(parsed[0], "exit") == 0)
 	{
 		if (parsed[1])
@@ -16,18 +18,13 @@ void func_exit(char *buffer, char **parsed, paths_t *p_path_string)
 			if (exit_num)
 			{
 				free(parsed);
-				if (buffer)
-					free(buffer);
-				if (p_path_string)
-					free_list(p_path_string);
-				exit(exit_num);
+				free(buffer);
+				free_list(p_path_string);
+				_exit(exit_num);
 			}
 		}
-		if (buffer)
-			free(buffer);
-		if (p_path_string)
-			free_list(p_path_string);
-		free(parsed);
-		exit(exit_num);
+		free(buffer);
+		free_list(p_path_string);
+		_exit(0);
 	}
 }

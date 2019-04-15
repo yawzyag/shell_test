@@ -26,6 +26,7 @@ typedef struct path_s
 } paths_t;
 
 size_t print_list(paths_t *h);
+char *str_concat(char *s1, char *s2);
 char *_strdup(char *str);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
@@ -37,13 +38,14 @@ void sigintHandler(int nt);
 paths_t *get_path(char **env);
 paths_t *create_struct(paths_t **head, char *str);
 void parse_text_path(char *str, char **parsed);
-void exec_args(char **argv, char **parsed, char **env, paths_t *p_path_string);
+void exec_args(char *buf, char **argv, char **parsed, char **env, paths_t *p_path_string);
 void func_exit(char *buffer, char **parsed, paths_t *p_path_string);
-void check_path(char **parsed, paths_t *h);
+char *check_path(char **parsed, paths_t *h);
 void parse_text(char *str, char **parsed);
 void free_list(paths_t *head);
 void free_parsed(char **parsed);
 char *_strcat(char *dest, char *src);
+void call_func(char *buffer, char **argv, char **parsed, char **env, paths_t *p_path_string);
 
 extern int exit_num;
 
