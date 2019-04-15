@@ -12,7 +12,6 @@ char *check_path(char **parsed, paths_t *h)
     var = parsed[0];
 
     tmp = str_concat(slash, var);
-    printf("%s\n", tmp);
     /* buf = malloc(sizeof(struct stat));*/
     /*if (buf == NULL)
       return;*/

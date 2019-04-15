@@ -27,6 +27,7 @@ void exec_args(char *buffer, char **argv, char **parsed, char **env, paths_t *p_
 	}
 	else if (pid == 0)
 	{
+		(void) env;
 		process = execve(text_parsed, parsed, env);
 		if (process < 0)
 		{
@@ -46,6 +47,6 @@ void exec_args(char *buffer, char **argv, char **parsed, char **env, paths_t *p_
 		 * waiting for child to terminate
 		 */
 		wait(&status);
-		free(text_parsed);
+		/*free(text_parsed);*/
 	}
 }
