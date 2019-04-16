@@ -27,7 +27,6 @@ void exec_args(char *buffer, char **argv, char **parsed, char **env, paths_t *p_
 	}
 	else if (pid == 0)
 	{
-		(void) env;
 		process = execve(text_parsed, parsed, env);
 		if (process < 0)
 		{
@@ -38,6 +37,7 @@ void exec_args(char *buffer, char **argv, char **parsed, char **env, paths_t *p_
 			write(STDERR_FILENO, text_parsed, _strlen(text_parsed));
 			write(STDERR_FILENO, ": not found\n", 13);
 			free_list(p_path_string);
+			free(buffer);
 			_exit(127);
 		}
 	}
@@ -47,6 +47,6 @@ void exec_args(char *buffer, char **argv, char **parsed, char **env, paths_t *p_
 		 * waiting for child to terminate
 		 */
 		wait(&status);
-		/*free(text_parsed);*/
+		free(text_parsed);
 	}
 }

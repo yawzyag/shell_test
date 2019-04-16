@@ -32,7 +32,6 @@ char *check_path(char **parsed, paths_t *h)
 		    free(juanito);
 		    free(tmp);
 		    return (tmp2);
-		printf("%s\n%s\n", tmp2, parsed[0]);
 		/*free(juanito);*/
 		break;
             }

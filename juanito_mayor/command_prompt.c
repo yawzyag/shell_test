@@ -56,7 +56,7 @@ void command_promt(char **argv, char *envp[])
 			{
 				parse_text(buffer, parsed_args);
 				call_func(buffer, argv, parsed_args, envp, p_path_string);
-				free(buffer);
+				/*free(buffer);*/
 			}
 			else
 			{
